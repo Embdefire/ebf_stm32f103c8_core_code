@@ -18,7 +18,9 @@
 #include "stm32f10x.h"
 #include "./usart/bsp_usart.h"
 #include "./rtc/bsp_rtc.h"
-#include "./key/bsp_key.h"  
+#include "./key/bsp_key.h"
+#include "./led/bsp_led.h"
+#include "./Timbase/bsp_TiMbase.h" 
 
 
 // N = 2^32/365/24/60/60 = 136 年
@@ -51,24 +53,12 @@ extern __IO uint32_t TimeDisplay ;
   * @retval 无
   */
 int main()
-{		
-	
-//可使用该宏设置是否使用液晶显示
-#ifdef  USE_LCD_DISPLAY
-	
-		ILI9341_Init ();         //LCD 初始化
-		LCD_SetFont(&Font8x16);
-		LCD_SetColors(RED,BLACK);
-
-		ILI9341_Clear(0,0,LCD_X_LENGTH,LCD_Y_LENGTH);	/* 清屏，显示全黑 */
-
-		ILI9341_DispStringLine_EN(LINE(0),"        BH RTC demo");
-#endif
-	
+{
 	  USART_Config();		
-	
 		Key_GPIO_Config();
-
+    BASIC_TIM_Init();
+    LED_GPIO_Config();
+  
 		/* 配置RTC秒中断优先级 */
 	  RTC_NVIC_Config();
 	  RTC_CheckAndConfig(&systmtime);
@@ -81,22 +71,20 @@ int main()
 				/* 当前时间 */
 	      Time_Display( RTC_GetCounter(),&systmtime); 		  
 	      TimeDisplay = 0;
-	    }
-			
-			//按下按键，通过串口修改时间
-			if( Key_Scan(KEY1_GPIO_PORT,KEY1_GPIO_PIN) == KEY_ON  )
-			{
-				struct rtc_time set_time;
+	    }		
+      if( Key_Scan(KEY1_GPIO_PORT,KEY1_GPIO_PIN) == KEY_ON  )
+      {
+        /*LED1反转*/
+        LED1_TOGGLE;
+        printf("KEY 1 is pressed\r\n");
+      } 
 
-				/*使用串口接收设置的时间，输入数字时注意末尾要加回车*/
-				Time_Regulate_Get(&set_time);
-				/*用接收到的时间设置RTC*/
-				Time_Adjust(&set_time);
-				
-				//向备份寄存器写入标志
-				BKP_WriteBackupRegister(RTC_BKP_DRX, RTC_BKP_DATA);
-
-			} 			
+      if( Key_Scan(KEY2_GPIO_PORT,KEY2_GPIO_PIN) == KEY_ON  )
+      {
+        /*LED2反转*/
+        LED2_TOGGLE;
+        printf("KEY 2 is pressed\r\n");
+      }
 	  }
 }
 

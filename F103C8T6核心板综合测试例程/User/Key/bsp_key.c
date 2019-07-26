@@ -27,7 +27,7 @@ void Key_GPIO_Config(void)
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
 	/*开启按键端口的时钟*/
-	RCC_APB2PeriphClockCmd(KEY1_GPIO_CLK|KEY2_GPIO_CLK,ENABLE); 
+	RCC_APB2PeriphClockCmd(KEY1_GPIO_CLK|KEY2_GPIO_CLK,ENABLE);
 	
 	//选择按键的引脚
 	GPIO_InitStructure.GPIO_Pin = KEY1_GPIO_PIN; 

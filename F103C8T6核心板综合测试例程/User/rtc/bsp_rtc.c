@@ -461,28 +461,10 @@ void Time_Display(uint32_t TimeVar,struct rtc_time *tm)
 	   /*  把标准时间转换为北京时间*/
 	   BJ_TimeVar =TimeVar + TIME_ZOOM;
 
-	   to_tm(BJ_TimeVar, tm);/*把定时器的值转换为北京时间*/	
-	
-	  if((!tm->tm_hour && !tm->tm_min && !tm->tm_sec)  || (FirstDisplay))
-	  {
-	      
-	      GetChinaCalendar((u16)tm->tm_year, (u8)tm->tm_mon, (u8)tm->tm_mday, str);	
-					printf("\r\n 今天新历：%0.2d%0.2d,%0.2d,%0.2d", str[0], str[1], str[2],  str[3]);
-	
-	      GetChinaCalendarStr((u16)tm->tm_year,(u8)tm->tm_mon,(u8)tm->tm_mday,str);
-					printf("\r\n 今天农历：%s\r\n", str);
-	
-	     if(GetJieQiStr((u16)tm->tm_year, (u8)tm->tm_mon, (u8)tm->tm_mday, str))
-					printf("\r\n 今天农历：%s\r\n", str);
-	
-	      FirstDisplay = 0;
-	  }	 	  	
+	   to_tm(BJ_TimeVar, tm);/*把定时器的值转换为北京时间*/	  	
 
 	  /* 输出时间戳，公历时间 */
-	  printf(" UNIX时间戳 = %d 当前时间为: %d年(%s年) %d月 %d日 (星期%s)  %0.2d:%0.2d:%0.2d\r",TimeVar,
-	                    tm->tm_year, zodiac_sign[(tm->tm_year-3)%12], tm->tm_mon, tm->tm_mday, 
-	                    WEEK_STR[tm->tm_wday], tm->tm_hour, 
-	                    tm->tm_min, tm->tm_sec);
+	  printf(" 当前时间为: %0.2d:%0.2d:%0.2d\r", tm->tm_hour, tm->tm_min, tm->tm_sec);
 		
 #ifdef  USE_LCD_DISPLAY
 

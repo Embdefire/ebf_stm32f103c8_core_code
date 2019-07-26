@@ -24,7 +24,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
 #include "./usart/bsp_usart.h"
-
+#include "./led/bsp_led.h"
+#include "./usart/bsp_usart.h"
+#include "./Timbase/bsp_TiMbase.h"
 
 extern uint32_t TimeDisplay;
 
@@ -37,6 +39,7 @@ extern uint32_t TimeDisplay;
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+extern volatile uint32_t time;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -170,14 +173,23 @@ void RTC_IRQHandler(void)
 /******************************************************************************/
 
 /**
-  * @brief  This function handles PPP interrupt request.
+  * @brief  This function handles TIM2 interrupt request.
   * @param  None
   * @retval None
   */
-/*void PPP_IRQHandler(void)
+void  BASIC_TIM_IRQHandler (void)
 {
-}*/
-
+	if ( TIM_GetITStatus( BASIC_TIM, TIM_IT_Update) != RESET ) 
+	{	
+		time++;
+		if(time == 500)
+		{
+			Flash_Led();
+			time = 0;
+		}
+		TIM_ClearITPendingBit(BASIC_TIM , TIM_FLAG_Update);  		 
+	}		 	
+}
 /**
   * @}
   */ 
