@@ -603,9 +603,9 @@
           <GroupName>DOC</GroupName>
           <Files>
             <File>
-              <FileName>readme.txt</FileName>
+              <FileName>综合测试例程说明.txt</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\Doc\readme.txt</FilePath>
+              <FilePath>..\..\Doc\综合测试例程说明.txt</FilePath>
             </File>
           </Files>
         </Group>
